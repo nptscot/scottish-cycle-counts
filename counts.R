@@ -1,58 +1,39 @@
----
-output: github_document
----
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
+## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   message=FALSE,
   warning=FALSE
 )
-```
 
-# scottish-cycle-counts
 
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of scottish-cycle-counts is to read-in a process data on cycling volumes in Scotland.
-
-```{r}
+## -----------------------------------------------------------------------------
 library(tidyverse)
-```
 
-The input dataset is a single .zip file:
 
-```{r}
+## -----------------------------------------------------------------------------
 zipped_data = list.files(pattern = ".zip")
 zipped_data
-```
 
-```{r, echo=FALSE, eval=FALSE}
-tail(zipped_data, 1)
-```
 
-We can unzip it as follows:
+## ---- echo=FALSE, eval=FALSE--------------------------------------------------
+#> tail(zipped_data, 1)
 
-```{r}
+
+## -----------------------------------------------------------------------------
 unzip(zipped_data, exdir = "data-raw")
 files_csv = list.files("data-raw", pattern = ".csv", full.names = TRUE)
 files_csv
-```
 
-We can read this file in R as follows:
 
-```{r}
+## -----------------------------------------------------------------------------
 # counts = arrow::open_dataset("data-raw")
 counts = map_dfr(files_csv, read_csv)
 dim(counts)
 counts
-```
 
-```{r}
+
+## -----------------------------------------------------------------------------
 counts_monthly = counts |>
   mutate(
     year = year(endTime),
@@ -86,17 +67,17 @@ counts_monthly_top = counts_monthly |>
   summarise(
     count = sum(count)
   )
-```
 
-```{r}
+
+## -----------------------------------------------------------------------------
 counts_monthly_top |>
   ggplot(aes(x = date, y = count, colour = Area)) +
   geom_line() +
   # Add log y-axis:
   scale_y_log10()
-```
 
-```{r, echo=FALSE}
+
+## ---- echo=FALSE--------------------------------------------------------------
 # Convert README.Rmd to counts.R:  
 knitr::purl("README.Rmd", "counts.R")
-```
+

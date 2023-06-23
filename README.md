@@ -54,186 +54,6 @@ We can read this file in R as follows:
 ``` r
 # counts = arrow::open_dataset("data-raw")
 counts = map_dfr(files_csv, read_csv)
-#> Rows: 11632 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 14364 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 22302 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 2738 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 689 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 3590 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 27886 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 1890 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 11718 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 35604 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 21096 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 16248 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 1835 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 5328 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 3303 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 1835 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 7803 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 17766 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 9450 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 13230 Columns: 10
-#> ── Column specification ────────────────────────────────────────────────────────
-#> Delimiter: ","
-#> chr  (5): area, location, provider, siteID, usmart_id
-#> dbl  (3): count, latitude, longitude
-#> dttm (2): endTime, startTime
-#> 
-#> ℹ Use `spec()` to retrieve the full column specification for this data.
-#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 dim(counts)
 #> [1] 230307     10
 counts
@@ -266,8 +86,6 @@ counts_monthly = counts |>
   summarise(
     count = sum(count)
   )
-#> `summarise()` has grouped output by 'date'. You can override using the
-#> `.groups` argument.
 # Add column with names for most common areas:
 # Most common areas are:
 area_counts = counts_monthly |>
@@ -290,8 +108,6 @@ counts_monthly_top = counts_monthly |>
   summarise(
     count = sum(count)
   )
-#> `summarise()` has grouped output by 'date'. You can override using the
-#> `.groups` argument.
 ```
 
 ``` r
@@ -303,3 +119,23 @@ counts_monthly_top |>
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+    #> 1/18                   
+    #> 2/18 [unnamed-chunk-10]
+    #> 3/18                   
+    #> 4/18 [unnamed-chunk-11]
+    #> 5/18                   
+    #> 6/18 [unnamed-chunk-12]
+    #> 7/18                   
+    #> 8/18 [unnamed-chunk-13]
+    #> 9/18                   
+    #> 10/18 [unnamed-chunk-14]
+    #> 11/18                   
+    #> 12/18 [unnamed-chunk-15]
+    #> 13/18                   
+    #> 14/18 [unnamed-chunk-16]
+    #> 15/18                   
+    #> 16/18 [unnamed-chunk-17]
+    #> 17/18                   
+    #> 18/18 [unnamed-chunk-18]
+    #> [1] "counts.R"
