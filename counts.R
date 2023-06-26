@@ -29,7 +29,7 @@ files_csv
 ## -----------------------------------------------------------------------------
 # counts = arrow::open_dataset("data-raw")
 # library(data.table)
-# counts = data.frame(list_rbind(lapply(files_csv,data.table::fread))) #DT's quick way to read the files 
+# counts = data.frame(data.table::rbindlist(lapply(files_csv,data.table::fread))) #DT's quick way to read the files 
 counts = map_dfr(files_csv, read_csv)
 dim(counts)
 counts
