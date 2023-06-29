@@ -1,2 +1,5 @@
 *.zip
 data-raw/
+.Rproj.user
+.Rhistory
+*.Rproj
