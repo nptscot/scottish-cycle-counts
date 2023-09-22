@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -11,26 +11,33 @@ knitr::opts_chunk$set(
 library(tidyverse)
 
 
-## -----------------------------------------------------------------------------
-zipped_data = list.files(pattern = "\\.zip$")
-zipped_data
+## ----eval=FALSE---------------------------------------------------------------
+#> dir.create("data_raw")
+#> system("gh release download 1 --dir data_raw")
 
 
-## ---- echo=FALSE, eval=FALSE--------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
+#> zipped_data = list.files(path = "data_raw",pattern = "\\.zip$",full.names = T)
+#> zipped_data
+
+
+## ----echo=FALSE, eval=FALSE---------------------------------------------------
 #> tail(zipped_data, 1)
 
 
+## ----eval=FALSE---------------------------------------------------------------
+#> unzip(zipped_data, exdir = "data_raw")
+
+
 ## -----------------------------------------------------------------------------
-unzip(zipped_data, exdir = "data-raw")
-files_csv = list.files("data-raw", pattern = "\\.csv$", full.names = TRUE)
+files_csv = list.files("data_raw", pattern = "\\.csv$", full.names = TRUE)
 files_csv
 
 
 ## -----------------------------------------------------------------------------
-# counts = arrow::open_dataset("data-raw")
 # library(data.table)
 # counts = data.frame(data.table::rbindlist(lapply(files_csv,data.table::fread))) #DT's quick way to read the files 
-counts = map_dfr(files_csv, read_csv)
+counts = map_dfr(files_csv, read_csv,show_col_types = FALSE)
 dim(counts)
 counts
 
@@ -213,7 +220,66 @@ ADF_dtype |>
 
 
 
-## ---- echo=FALSE--------------------------------------------------------------
+## -----------------------------------------------------------------------------
+library(sf)
+library(tmap)
+
+
+## -----------------------------------------------------------------------------
+rnet_commute = read_rds("../npt/outputs/rnet_commute.Rds")
+rnet_commute
+
+
+## -----------------------------------------------------------------------------
+sf_counts = clean_counts |>
+  select(siteID,latitude,longitude,provider,location) |>
+  unique() |>
+  st_as_sf(coords = c("longitude","latitude"),crs = 4326)
+sf_counts
+
+
+## -----------------------------------------------------------------------------
+rnet_buffer20 = rnet_commute |> st_buffer(dist = 20)
+
+sf_counts_selected = sf_counts[rnet_buffer20,]
+
+
+
+## -----------------------------------------------------------------------------
+sf_counts_joined = st_join(sf_counts_selected,rnet_commute,join = st_nearest_feature)
+sf_counts_joined
+
+
+## -----------------------------------------------------------------------------
+val_app1 = sf_counts_joined |> left_join(AADF_sites,by = "siteID") |> filter(count_mean > 0)
+
+
+## -----------------------------------------------------------------------------
+tm_shape(rnet_commute)+
+  tm_lines(col = "bicycle",lwd = "bicycle")+
+  tm_shape(val_app1)+
+  tm_dots(col = "count_mean")
+
+
+## -----------------------------------------------------------------------------
+val_app1 |> 
+  st_drop_geometry() |>
+  mutate(ratio = bicycle/count_mean) |> 
+  ggplot(aes(ratio))+
+  geom_histogram()
+
+## -----------------------------------------------------------------------------
+val_app1 |>
+  st_drop_geometry() |>
+  ggplot(aes(x = count_mean,
+             y = bicycle))+
+  geom_point()+
+  geom_smooth(method = "lm",
+              formula = 'y ~ x',
+              se = F)
+
+
+## ----echo=FALSE---------------------------------------------------------------
 # Convert README.Rmd to counts.R:  
 knitr::purl("README.Rmd", "counts.R")
 
