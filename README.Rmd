@@ -19,17 +19,19 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of scottish-cycle-counts is to read-in a process data on cycling volumes in Scotland.
+The goal of Scottish-cycle-counts is to read-in a process data on cycling volumes in Scotland.
 
 ```{r}
 library(tidyverse)
 ```
 
 First of all, a copy of the original files can be obtained with the code below. This code is to be run just once.
+
 ```{r, eval=FALSE}
 dir.create("data_raw")
 system("gh release download 1 --dir data_raw")
 ```
+
 The input dataset is a single .zip file:
 
 ```{r,eval=FALSE}
@@ -42,11 +44,10 @@ tail(zipped_data, 1)
 ```
 
 We can unzip it as follows:
+
 ```{r, eval=FALSE}
 unzip(zipped_data, exdir = "data_raw")
 ```
-
-
 
 ```{r}
 files_csv = list.files("data_raw", pattern = "\\.csv$", full.names = TRUE)
@@ -259,17 +260,15 @@ ADF_dtype |>
 library(sf)
 library(tmap)
 ```
-The following code reads the network with the estimated commute trips from
-the npt repository. Each edge/link of the network has four attributes. We will
-focus on `bicycle` which is the estimated number of daily commute trips in both
-directions.
+
+The following code reads the network with the estimated commute trips from the npt repository. Each edge/link of the network has four attributes. We will focus on `bicycle` which is the estimated number of daily commute trips in both directions.
 
 ```{r}
 rnet_commute = read_rds("../npt/outputs/rnet_commute.Rds")
 rnet_commute
 ```
-A `sf` object is created from the `clean_counts` data frame. AADF for each
-counts are joined using the `siteID`
+
+A `sf` object is created from the `clean_counts` data frame. AADF for each counts are joined using the `siteID`
 
 ```{r}
 sf_counts = clean_counts |>
@@ -281,8 +280,6 @@ sf_counts = clean_counts |>
 sf_counts
 ```
 
-
-
 A subset of the counts are taken based on a buffer of the `rnet_commute` object.
 
 ```{r}
@@ -292,12 +289,13 @@ sf_counts_selected = sf_counts[rnet_buffer20,]
 ```
 
 ### Approach A
+
 The nearest feature is joined to each point location
+
 ```{r}
 val_app1 = st_join(sf_counts_selected,rnet_commute,join = st_nearest_feature)
 val_app1
 ```
-
 
 ```{r}
 tm_shape(rnet_commute)+
@@ -306,6 +304,7 @@ tm_shape(rnet_commute)+
   tm_dots(col = "count_mean")
 ```
 
+The following plot compares the observed counts and the paired estimate flows.
 
 ```{r}
 val_app1 |> 
@@ -314,37 +313,48 @@ val_app1 |>
   ggplot(aes(ratio))+
   geom_histogram()
 ```
+
 ```{r}
 val_app1 |>
   st_drop_geometry() |>
   ggplot(aes(x = count_mean,
-             y = bicycle))+
-  geom_point()+
+             y = bicycle)) +
+  geom_point() +
   geom_smooth(method = "lm",
               formula = 'y ~ x',
-              se = F)
+              se = F) +
+  coord_fixed(xlim = c(0, max(
+    c(val_app1$count_mean, val_app1$bicycle)
+  )),
+  ylim = c(0, max(
+    c(val_app1$count_mean, val_app1$bicycle)
+  )))
+```
+
+A linear regression is used to evaluate the fit of the estimates, it is assumed that the proportion of commute trips is constant across counts (intercept = `0`).
+
+```{r}
+lm_app1 = lm(bicycle ~ count_mean+0,data = val_app1)
+summary(lm_app1)
 ```
 
 ### Approach B
-The previous approach assigned a count site to each road link based. So far, it
-has not been addressed the fact that counts might be reporting uni-directional
-flows along specific links. 
 
-Using the `sf_counts_selected` object, we produce a buffer of 30 metres from
-each count site.
+The previous approach assigned a count site to each road link based. So far, it has not been addressed the fact that counts might be reporting uni-directional flows along specific links.
+
+Using the `sf_counts_selected` object, we produce a buffer of 30 metres from each count site.
+
 ```{r}
 sel_counts_buf30 = st_buffer(sf_counts_selected,dist = 30)
 ```
 
-All overlaps within the `sel_counts_buf30` are identified using the following
-code. 
+All overlaps within the `sel_counts_buf30` are identified using the following code.
+
 ```{r}
 counts_overlap = st_intersects(sel_counts_buf30, sel_counts_buf30)
 ```
 
-Some overlaps might reveal count sites reporting flows of different
-directions on the same edge/link. For example, the sites EDH0040 and EDH0041
-which are located on Mayfield Road.
+Some overlaps might reveal count sites reporting flows of different directions on the same edge/link. For example, the sites EDH0040 and EDH0041 which are located on Mayfield Road.
 
 ```{r}
 tmap_mode("view")
@@ -355,9 +365,7 @@ tm_shape(sel_counts_buf30[sel_counts_buf30$siteID %in% c("EDH0040","EDH0041"),])
   
 ```
 
-
-A more complex instance is the overlap of sensors on Melville Dr, two of the
-sensors report flows on the main road and the other has data of the adjacend path.
+A more complex instance is the overlap of sensors on Melville Dr, two of the sensors report flows on the main road and the other has data of the adjacend path.
 
 ```{r}
 tmap_mode("view")
@@ -367,9 +375,7 @@ tm_shape(sel_counts_buf30[sel_counts_buf30$siteID %in% c("EDH0042","EDH0043","ED
   tm_dots()
 ```
 
-The following code aggregates some of the overlapping counts using the
-`location` attribute as aggregation criteria. 
-
+The following code aggregates some of the overlapping counts using the `location` attribute as aggregation criteria.
 
 ```{r}
 grouped_counts =
@@ -405,8 +411,7 @@ grouped_counts =
                  }))
 ```
 
-As in the previous approach, the count sites are joined to the nearest feature
-in the `rnet_commute` network.
+As in the previous approach, the count sites are joined to the nearest feature in the `rnet_commute` network.
 
 ```{r}
 grouped_counts$nearest_edge = st_nearest_feature(grouped_counts,
@@ -416,7 +421,9 @@ grouped_counts$nearest_edge = st_nearest_feature(grouped_counts,
 
 val_app2 = cbind(grouped_counts,st_drop_geometry(rnet_commute)[grouped_counts$nearest_edge,])
 ```
+
 The following code shows the counts with the corresponding network edges/links.
+
 ```{r}
 tm_shape(grouped_counts)+
   tm_dots()+
@@ -424,7 +431,31 @@ tm_shape(grouped_counts)+
   tm_lines()
 ```
 
+The figure below compares the counts and the estimated flows for the current approach
 
+```{r}
+val_app2 |>
+  st_drop_geometry() |>
+  ggplot(aes(x = count_mean,
+             y = bicycle)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              formula = 'y ~ x',
+              se = F) +
+  coord_fixed(xlim = c(0, max(
+    c(val_app2$count_mean, val_app2$bicycle)
+  )),
+  ylim = c(0, max(
+    c(val_app2$count_mean, val_app2$bicycle)
+  )))
+```
+
+As in the previous approach, a linear regression is used to have a high-level assessment of the estimations. With this approach, although there is not a significant change in the estimate, there is a slight improvement in the R^2^.
+
+```{r}
+lm_app2 = lm(bicycle ~ count_mean+0,data = val_app2)
+summary(lm_app2)
+```
 
 ```{r, echo=FALSE}
 # Convert README.Rmd to counts.R:  

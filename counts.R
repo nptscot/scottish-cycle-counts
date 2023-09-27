@@ -265,15 +265,27 @@ val_app1 |>
   ggplot(aes(ratio))+
   geom_histogram()
 
+
 ## -----------------------------------------------------------------------------
 val_app1 |>
   st_drop_geometry() |>
   ggplot(aes(x = count_mean,
-             y = bicycle))+
-  geom_point()+
+             y = bicycle)) +
+  geom_point() +
   geom_smooth(method = "lm",
               formula = 'y ~ x',
-              se = F)
+              se = F) +
+  coord_fixed(xlim = c(0, max(
+    c(val_app1$count_mean, val_app1$bicycle)
+  )),
+  ylim = c(0, max(
+    c(val_app1$count_mean, val_app1$bicycle)
+  )))
+
+
+## -----------------------------------------------------------------------------
+lm_app1 = lm(bicycle ~ count_mean+0,data = val_app1)
+summary(lm_app1)
 
 
 ## -----------------------------------------------------------------------------
@@ -349,6 +361,28 @@ tm_shape(grouped_counts)+
   tm_dots()+
   tm_shape(rnet_commute[grouped_counts$nearest_edge,])+
   tm_lines()
+
+
+## -----------------------------------------------------------------------------
+val_app2 |>
+  st_drop_geometry() |>
+  ggplot(aes(x = count_mean,
+             y = bicycle)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              formula = 'y ~ x',
+              se = F) +
+  coord_fixed(xlim = c(0, max(
+    c(val_app2$count_mean, val_app2$bicycle)
+  )),
+  ylim = c(0, max(
+    c(val_app2$count_mean, val_app2$bicycle)
+  )))
+
+
+## -----------------------------------------------------------------------------
+lm_app2 = lm(bicycle ~ count_mean+0,data = val_app2)
+summary(lm_app2)
 
 
 ## ----echo=FALSE---------------------------------------------------------------
