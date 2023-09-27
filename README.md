@@ -361,7 +361,7 @@ rnet_commute
 #> 10       0                1        1        90 LINESTRING (-3.16555 55.962...
 ```
 
-A `sf` object is created from the `clean_counts` data frame. AADF for
+An `sf` object is created from the `clean_counts` data frame. AADF for
 each counts are joined using the `siteID`
 
 ``` r
@@ -398,7 +398,7 @@ A subset of the counts are taken based on a buffer of the `rnet_commute`
 object.
 
 ``` r
-rnet_buffer20 = rnet_commute |> st_buffer(dist = 20)
+rnet_buffer20 = rnet_commute |> st_union() |>  st_buffer(dist = 20)
 
 sf_counts_selected = sf_counts[rnet_buffer20,]
 ```
@@ -410,29 +410,25 @@ The nearest feature is joined to each point location
 ``` r
 val_app1 = st_join(sf_counts_selected,rnet_commute,join = st_nearest_feature)
 val_app1
-#> Simple feature collection with 15 features and 11 fields
+#> Simple feature collection with 21 features and 11 fields
 #> Geometry type: POINT
 #> Dimension:     XY
-#> Bounding box:  xmin: -3.22415 ymin: 55.9299 xmax: -3.17567 ymax: 55.95377
+#> Bounding box:  xmin: -3.24015 ymin: 55.92337 xmax: -3.12779 ymax: 55.9566
 #> Geodetic CRS:  WGS 84
-#> # A tibble: 15 × 12
+#> # A tibble: 21 × 12
 #>    siteID  provider         location count_mean count_median count_min count_max
 #>  * <chr>   <chr>            <chr>         <dbl>        <dbl>     <dbl>     <dbl>
-#>  1 EDH0030 City of Edinbur… Dalry R…     1009.           331        40     27670
-#>  2 EDH0037 City of Edinbur… Whiteho…      437.           457        54       753
-#>  3 EDH0045 City of Edinbur… Melvill…      128.           128        13       266
-#>  4 EDH0022 City of Edinbur… North M…      885.           888        99      1839
-#>  5 EDH0035 City of Edinbur… A90 Dea…      415.           361        36       857
-#>  6 EDH0039 City of Edinbur… Bruntsf…      218.           236         0       481
-#>  7 EDH0043 City of Edinbur… Melvill…     1099.          1109       242      1813
-#>  8 EDH0041 City of Edinbur… Mayfiel…      152.             0         0       683
-#>  9 EDH0044 City of Edinbur… Melvill…      251.           257        32       446
-#> 10 EDH0040 City of Edinbur… Mayfiel…      236.           225        19       581
-#> 11 EDH0023 City of Edinbur… North M…      206.           205        21       400
-#> 12 EDH0038 City of Edinbur… Bruntsf…      242.           251        32       420
-#> 13 EDH0027 City of Edinbur… Harriso…      433.           455         0      1182
-#> 14 EDH0021 City of Edinbur… Morriso…       68.7           63         8       416
-#> 15 SUS5661 Sustrans         Edinbur…     1031.          1067        55      1753
+#>  1 EDH0030 City of Edinbur… Dalry R…      1009.          331        40     27670
+#>  2 EDH0037 City of Edinbur… Whiteho…       437.          457        54       753
+#>  3 EDH0045 City of Edinbur… Melvill…       128.          128        13       266
+#>  4 EDH0022 City of Edinbur… North M…       885.          888        99      1839
+#>  5 EDH0035 City of Edinbur… A90 Dea…       415.          361        36       857
+#>  6 EDH0039 City of Edinbur… Bruntsf…       218.          236         0       481
+#>  7 EDH0043 City of Edinbur… Melvill…      1099.         1109       242      1813
+#>  8 EDH0041 City of Edinbur… Mayfiel…       152.            0         0       683
+#>  9 EDH0029 City of Edinbur… A8 Cors…       100.            0         0       829
+#> 10 EDH0044 City of Edinbur… Melvill…       251.          257        32       446
+#> # ℹ 11 more rows
 #> # ℹ 5 more variables: geometry <POINT [°]>, bicycle <dbl>,
 #> #   bicycle_go_dutch <dbl>, Gradient <dbl>, Quietness <dbl>
 ```
@@ -490,18 +486,18 @@ summary(lm_app1)
 #> lm(formula = bicycle ~ count_mean + 0, data = val_app1)
 #> 
 #> Residuals:
-#>    Min     1Q Median     3Q    Max 
-#> -5.509 -0.527  1.130  4.123  6.868 
+#>     Min      1Q  Median      3Q     Max 
+#> -4.8149 -0.5083  0.6479  4.4314  8.0276 
 #> 
 #> Coefficients:
 #>            Estimate Std. Error t value Pr(>|t|)    
-#> count_mean 0.007439   0.001755   4.238 0.000827 ***
+#> count_mean 0.006192   0.001606   3.855 0.000988 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> Residual standard error: 3.899 on 14 degrees of freedom
-#> Multiple R-squared:  0.562,  Adjusted R-squared:  0.5307 
-#> F-statistic: 17.96 on 1 and 14 DF,  p-value: 0.0008266
+#> Residual standard error: 4.054 on 20 degrees of freedom
+#> Multiple R-squared:  0.4263, Adjusted R-squared:  0.3976 
+#> F-statistic: 14.86 on 1 and 20 DF,  p-value: 0.0009876
 ```
 
 ### Approach B
@@ -648,18 +644,18 @@ summary(lm_app2)
 #> lm(formula = bicycle ~ count_mean + 0, data = val_app2)
 #> 
 #> Residuals:
-#>    Min     1Q Median     3Q    Max 
-#> -5.158 -1.268  0.410  4.216  5.249 
+#>     Min      1Q  Median      3Q     Max 
+#> -4.6021 -0.7120  0.2573  4.3372  8.0632 
 #> 
 #> Coefficients:
 #>            Estimate Std. Error t value Pr(>|t|)   
-#> count_mean 0.007092   0.001616    4.39  0.00108 **
+#> count_mean 0.005965   0.001523   3.917  0.00111 **
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> Residual standard error: 3.676 on 11 degrees of freedom
-#> Multiple R-squared:  0.6366, Adjusted R-squared:  0.6036 
-#> F-statistic: 19.27 on 1 and 11 DF,  p-value: 0.001082
+#> Residual standard error: 3.916 on 17 degrees of freedom
+#> Multiple R-squared:  0.4744, Adjusted R-squared:  0.4435 
+#> F-statistic: 15.35 on 1 and 17 DF,  p-value: 0.001109
 ```
 
     #>   |                                                           |                                                   |   0%  |                                                           |.                                                  |   1%                     |                                                           |.                                                  |   3% [unnamed-chunk-39]  |                                                           |..                                                 |   4%                     |                                                           |...                                                |   5% [unnamed-chunk-40]  |                                                           |...                                                |   7%                     |                                                           |....                                               |   8% [unnamed-chunk-41]  |                                                           |.....                                              |   9%                     |                                                           |.....                                              |  11% [unnamed-chunk-42]  |                                                           |......                                             |  12%                     |                                                           |.......                                            |  13% [unnamed-chunk-43]  |                                                           |.......                                            |  14%                     |                                                           |........                                           |  16% [unnamed-chunk-44]  |                                                           |.........                                          |  17%                     |                                                           |.........                                          |  18% [unnamed-chunk-45]  |                                                           |..........                                         |  20%                     |                                                           |...........                                        |  21% [unnamed-chunk-46]  |                                                           |...........                                        |  22%                     |                                                           |............                                       |  24% [unnamed-chunk-47]  |                                                           |.............                                      |  25%                     |                                                           |.............                                      |  26% [unnamed-chunk-48]  |                                                           |..............                                     |  28%                     |                                                           |...............                                    |  29% [unnamed-chunk-49]  |                                                           |...............                                    |  30%                     |                                                           |................                                   |  32% [unnamed-chunk-50]  |                                                           |.................                                  |  33%                     |                                                           |.................                                  |  34% [unnamed-chunk-51]  |                                                           |..................                                 |  36%                     |                                                           |...................                                |  37% [unnamed-chunk-52]  |                                                           |...................                                |  38%                     |                                                           |....................                               |  39% [unnamed-chunk-53]  |                                                           |.....................                              |  41%                     |                                                           |.....................                              |  42% [unnamed-chunk-54]  |                                                           |......................                             |  43%                     |                                                           |.......................                            |  45% [unnamed-chunk-55]  |                                                           |.......................                            |  46%                     |                                                           |........................                           |  47% [unnamed-chunk-56]  |                                                           |.........................                          |  49%                     |                                                           |..........................                         |  50% [unnamed-chunk-57]  |                                                           |..........................                         |  51%                     |                                                           |...........................                        |  53% [unnamed-chunk-58]  |                                                           |............................                       |  54%                     |                                                           |............................                       |  55% [unnamed-chunk-59]  |                                                           |.............................                      |  57%                     |                                                           |..............................                     |  58% [unnamed-chunk-60]  |                                                           |..............................                     |  59%                     |                                                           |...............................                    |  61% [unnamed-chunk-61]  |                                                           |................................                   |  62%                     |                                                           |................................                   |  63% [unnamed-chunk-62]  |                                                           |.................................                  |  64%                     |                                                           |..................................                 |  66% [unnamed-chunk-63]  |                                                           |..................................                 |  67%                     |                                                           |...................................                |  68% [unnamed-chunk-64]  |                                                           |....................................               |  70%                     |                                                           |....................................               |  71% [unnamed-chunk-65]  |                                                           |.....................................              |  72%                     |                                                           |......................................             |  74% [unnamed-chunk-66]  |                                                           |......................................             |  75%                     |                                                           |.......................................            |  76% [unnamed-chunk-67]  |                                                           |........................................           |  78%                     |                                                           |........................................           |  79% [unnamed-chunk-68]  |                                                           |.........................................          |  80%                     |                                                           |..........................................         |  82% [unnamed-chunk-69]  |                                                           |..........................................         |  83%                     |                                                           |...........................................        |  84% [unnamed-chunk-70]  |                                                           |............................................       |  86%                     |                                                           |............................................       |  87% [unnamed-chunk-71]  |                                                           |.............................................      |  88%                     |                                                           |..............................................     |  89% [unnamed-chunk-72]  |                                                           |..............................................     |  91%                     |                                                           |...............................................    |  92% [unnamed-chunk-73]  |                                                           |................................................   |  93%                     |                                                           |................................................   |  95% [unnamed-chunk-74]  |                                                           |.................................................  |  96%                     |                                                           |.................................................. |  97% [unnamed-chunk-75]  |                                                           |.................................................. |  99%                     |                                                           |...................................................| 100% [unnamed-chunk-76]

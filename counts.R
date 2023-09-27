@@ -241,7 +241,7 @@ sf_counts
 
 
 ## -----------------------------------------------------------------------------
-rnet_buffer20 = rnet_commute |> st_buffer(dist = 20)
+rnet_buffer20 = rnet_commute |> st_union() |>  st_buffer(dist = 20)
 
 sf_counts_selected = sf_counts[rnet_buffer20,]
 
