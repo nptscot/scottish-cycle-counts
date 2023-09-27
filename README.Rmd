@@ -268,7 +268,7 @@ directions.
 rnet_commute = read_rds("../npt/outputs/rnet_commute.Rds")
 rnet_commute
 ```
-A `sf` object is created from the `clean_counts` data frame. AADF for each
+An `sf` object is created from the `clean_counts` data frame. AADF for each
 counts are joined using the `siteID`
 
 ```{r}
