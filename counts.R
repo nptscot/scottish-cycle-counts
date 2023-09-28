@@ -234,24 +234,21 @@ rnet_commute
 sf_counts = clean_counts |>
   select(siteID,latitude,longitude,provider,location) |>
   unique() |>
+  left_join(AADF_sites,by = "siteID") |>
+  filter(count_mean > 0) |> 
   st_as_sf(coords = c("longitude","latitude"),crs = 4326)
 sf_counts
 
 
 ## -----------------------------------------------------------------------------
-rnet_buffer20 = rnet_commute |> st_buffer(dist = 20)
+rnet_buffer20 = rnet_commute |> st_union() |>  st_buffer(dist = 20)
 
 sf_counts_selected = sf_counts[rnet_buffer20,]
 
 
-
 ## -----------------------------------------------------------------------------
-sf_counts_joined = st_join(sf_counts_selected,rnet_commute,join = st_nearest_feature)
-sf_counts_joined
-
-
-## -----------------------------------------------------------------------------
-val_app1 = sf_counts_joined |> left_join(AADF_sites,by = "siteID") |> filter(count_mean > 0)
+val_app1 = st_join(sf_counts_selected,rnet_commute,join = st_nearest_feature)
+val_app1
 
 
 ## -----------------------------------------------------------------------------
@@ -268,15 +265,124 @@ val_app1 |>
   ggplot(aes(ratio))+
   geom_histogram()
 
+
 ## -----------------------------------------------------------------------------
 val_app1 |>
   st_drop_geometry() |>
   ggplot(aes(x = count_mean,
-             y = bicycle))+
-  geom_point()+
+             y = bicycle)) +
+  geom_point() +
   geom_smooth(method = "lm",
               formula = 'y ~ x',
-              se = F)
+              se = F) +
+  coord_fixed(xlim = c(0, max(
+    c(val_app1$count_mean, val_app1$bicycle)
+  )),
+  ylim = c(0, max(
+    c(val_app1$count_mean, val_app1$bicycle)
+  )))
+
+
+## -----------------------------------------------------------------------------
+lm_app1 = lm(bicycle ~ count_mean+0,data = val_app1)
+summary(lm_app1)
+
+
+## -----------------------------------------------------------------------------
+sel_counts_buf30 = st_buffer(sf_counts_selected,dist = 30)
+
+
+## -----------------------------------------------------------------------------
+counts_overlap = st_intersects(sel_counts_buf30, sel_counts_buf30)
+
+
+## -----------------------------------------------------------------------------
+tmap_mode("view")
+tm_shape(sel_counts_buf30[sel_counts_buf30$siteID %in% c("EDH0040","EDH0041"),])+
+  tm_polygons(alpha = 0.5)+
+  tm_shape(sf_counts_selected)+
+  tm_dots()
+  
+
+
+## -----------------------------------------------------------------------------
+tmap_mode("view")
+tm_shape(sel_counts_buf30[sel_counts_buf30$siteID %in% c("EDH0042","EDH0043","EDH0044","EDH0045"),])+
+  tm_polygons(alpha=0.3)+
+  tm_shape(sf_counts_selected)+
+  tm_dots()
+
+
+## -----------------------------------------------------------------------------
+grouped_counts =
+  do.call(rbind,
+          lapply(unique(counts_overlap),
+                 function(x) {
+                   tmp_group = sf_counts_selected[x,]
+                   
+                   # Count aggreagation
+                   simp_data = tmp_group |>
+                     # Removing the direction from the location string
+                     mutate(location = str_remove(location,
+                                                  "\\s\\w*bound")) |>
+                     st_drop_geometry() |>
+                     # Extracting the first value for the siteID,
+                     # provider and adds up the counts for sites with
+                     # the same 'location'
+                     summarise(across(c("siteID", "provider"),
+                                      \(x) head(x, n = 1)),
+                               across(starts_with("count_"), sum),
+                               .by =  "location")
+                   
+                   simp_group = tmp_group |>
+                     select(siteID) |>
+                     filter(siteID %in% simp_data$siteID)
+                   
+                   simp_counts = simp_group |>
+                     left_join(simp_data, by = "siteID") |>
+                     relocate(location, .after = provider) |>
+                     relocate(geometry, .after = count_max)
+                   
+                   return(simp_counts)
+                 }))
+
+
+## -----------------------------------------------------------------------------
+grouped_counts$nearest_edge = st_nearest_feature(grouped_counts,
+                                                 rnet_commute,
+                                                 check_crs = T)
+
+
+val_app2 = cbind(grouped_counts,st_drop_geometry(rnet_commute)[grouped_counts$nearest_edge,])
+
+
+## -----------------------------------------------------------------------------
+tm_shape(grouped_counts)+
+  tm_dots()+
+  tm_shape(rnet_commute[grouped_counts$nearest_edge,])+
+  tm_lines()
+
+
+## -----------------------------------------------------------------------------
+val_app2 |>
+  st_drop_geometry() |>
+  ggplot(aes(x = count_mean,
+             y = bicycle)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              formula = 'y ~ x',
+              se = F) +
+  coord_fixed(xlim = c(0, max(
+    c(val_app2$count_mean, val_app2$bicycle)
+  )),
+  ylim = c(0, max(
+    c(val_app2$count_mean, val_app2$bicycle)
+  )))
+
+
+## -----------------------------------------------------------------------------
+lm_app2 = lm(bicycle ~ count_mean+0,data = val_app2)
+summary(lm_app2)
 
 
 ## ----echo=FALSE---------------------------------------------------------------
