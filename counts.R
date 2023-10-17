@@ -252,8 +252,9 @@ val_app1
 
 
 ## -----------------------------------------------------------------------------
+tmap_mode("view")
 tm_shape(rnet_commute)+
-  tm_lines(col = "bicycle",lwd = "bicycle")+
+  tm_lines(col = "bicycle",lwd = "bicycle",lwd.legend = tm_legend_combine("col"))+
   tm_shape(val_app1)+
   tm_dots(col = "count_mean")
 
@@ -383,6 +384,275 @@ val_app2 |>
 ## -----------------------------------------------------------------------------
 lm_app2 = lm(bicycle ~ count_mean+0,data = val_app2)
 summary(lm_app2)
+
+
+## ----eval=FALSE, warning=FALSE------------------------------------------------
+#> setwd("../npt/outputdata")
+#> system("gh release download v2023-09-10-17-43-21.109279_commit_86ae338b12f523c27fcc290f48105f2e5dbdcab7")
+#> system("gh release download v2023-08-18-10-42-44_commit_cbb84b024550d638dbca066c5850d1b03d55fc66 --skip-existing")
+
+
+## -----------------------------------------------------------------------------
+networks_files = list.files(path = "../npt/outputdata/",pattern = "^rnet.*_list",full.names = TRUE)
+networks_files              
+
+
+## -----------------------------------------------------------------------------
+library(purrr)
+
+rnet_val = function(rnet_path,counts){
+  
+  # Loading the network RDS file
+  rnet_nested_list = read_rds(rnet_path)
+  
+  # Detecting the name of the main purpose
+  main_rnet_name = str_extract(rnet_path,"(commute|school)")
+  
+  # Flattening the list
+  rnet_flat_list = rnet_nested_list |> list_flatten()
+  
+  
+  lst_names = paste(main_rnet_name,names(rnet_flat_list),sep = ".")
+  
+  # Assigning names to the lists
+  names(rnet_flat_list) = lst_names
+  
+  lm_rnet = 
+    lapply(lst_names,function(rnet_name){
+    rnet = rnet_flat_list[[rnet_name]]
+    
+  # Creating buffer
+  rnet_buffer20 = rnet |>
+    st_union() |>
+    st_buffer(dist = 20)
+  
+  # Subsetting counts based on buffer
+  counts_selected = counts[rnet_buffer20,]
+  
+  # Creating buffer around counts 30 m
+  counts_buf30 = st_buffer(counts_selected,dist = 30)
+  
+  # Finding overlapping counts
+  counts_overlap_30 = st_intersects(counts_buf30, counts_buf30)
+  
+  # Processing overlaps and aggregating if possible
+  aggregated_counts =
+    do.call(rbind,
+            lapply(unique(counts_overlap_30),
+                   function(x) {
+                     tmp_group = counts_selected[x, ]
+                     
+                     # Count aggreagation
+                     simp_data = tmp_group |>
+                       # Removing the direction from the location string
+                       mutate(location = str_remove(location,
+                                                    "\\s\\w*bound")) |>
+                       st_drop_geometry() |>
+                       # Extracting the first value for the siteID,
+                       # provider and adds up the counts for sites with
+                       # the same 'location'
+                       summarise(across(c("siteID", "provider"),
+                                        \(x) head(x, n = 1)),
+                                 across(starts_with("count_"), sum),
+                                 .by =  "location")
+                     
+                     simp_group = tmp_group |>
+                       select(siteID) |>
+                       filter(siteID %in% simp_data$siteID)
+                     
+                     simp_counts = simp_group |>
+                       left_join(simp_data, by = "siteID") |>
+                       relocate(location, .after = provider) |>
+                       relocate(geometry, .after = count_max)
+                     
+                     return(simp_counts)
+                   }))
+  
+  aggregated_counts$nearest_edge = st_nearest_feature(aggregated_counts,
+                                                      rnet,
+                                                      check_crs = T)
+  
+  val_counts = cbind(aggregated_counts,
+                     st_drop_geometry(rnet)[aggregated_counts$nearest_edge,])
+  
+  
+  
+  
+  lm_counts = lm(bicycle ~ count_mean+0,data = val_counts)
+  
+  return(lm_counts)
+    
+  })
+  names(lm_rnet) = lst_names
+  
+  return(lm_rnet)
+}
+
+
+## ----eval=FALSE---------------------------------------------------------------
+#> val_results = lapply(networks_files,
+#>                      rnet_val,
+#>                      counts = sf_counts
+#>                      )
+#> 
+
+
+## ----include=FALSE,eval=FALSE-------------------------------------------------
+#> dir.create("interim_results")
+#> saveRDS(val_results,
+#>         file = "interim_results/val_results.Rds")
+
+
+## ----include=FALSE------------------------------------------------------------
+val_results = readRDS("interim_results/val_results.Rds")
+
+
+## -----------------------------------------------------------------------------
+library(broom)
+val_results_flat = val_results |> list_flatten(name_spec = "{inner}")
+
+bind_cols(tibble(network = names(val_results_flat)),
+          do.call(bind_rows,lapply(val_results_flat,function(tlm){
+            bind_cols(fit = glance(tlm) |> select(adj.r.squared),
+                      tidy(tlm) |> select(estimate,std.error))
+            }
+            )
+            )
+          )
+
+
+## -----------------------------------------------------------------------------
+library(GWmodel)
+
+rnet_val_gwr = function(rnet_path, counts) {
+  # Loading the network RDS file
+  rnet_nested_list = read_rds(rnet_path)
+  
+  # Detecting the name of the main purpose
+  main_rnet_name = str_extract(rnet_path, "(commute|school)")
+  
+  # Flattening the list
+  rnet_flat_list = rnet_nested_list |> list_flatten()
+  
+  
+  lst_names = paste(main_rnet_name, names(rnet_flat_list), sep = ".")
+  
+  # Assigning names to the lists
+  names(rnet_flat_list) = lst_names
+  
+  reg_rnet =
+    lapply(lst_names, function(rnet_name) {
+      rnet = rnet_flat_list[[rnet_name]]
+      
+      # Creating buffer
+      rnet_buffer20 = rnet |>
+        st_union() |>
+        st_buffer(dist = 20)
+      
+      # Subsetting counts based on buffer
+      counts_selected = counts[rnet_buffer20, ]
+      
+      # Creating buffer around counts 30 m
+      counts_buf30 = st_buffer(counts_selected, dist = 30)
+      
+      # Finding overlapping counts
+      counts_overlap_30 = st_intersects(counts_buf30, counts_buf30)
+      
+      # Processing overlaps and aggregating if possible
+      aggregated_counts =
+        do.call(rbind,
+                lapply(unique(counts_overlap_30),
+                       function(x) {
+                         tmp_group = counts_selected[x,]
+                         
+                         # Count aggreagation
+                         simp_data = tmp_group |>
+                           # Removing the direction from the location string
+                           mutate(location = str_remove(location,
+                                                        "\\s\\w*bound")) |>
+                           st_drop_geometry() |>
+                           # Extracting the first value for the siteID,
+                           # provider and adds up the counts for sites with
+                           # the same 'location'
+                           summarise(across(c("siteID", "provider"),
+                                            \(x) head(x, n = 1)),
+                                     across(starts_with("count_"), sum),
+                                     .by =  "location")
+                         
+                         simp_group = tmp_group |>
+                           select(siteID) |>
+                           filter(siteID %in% simp_data$siteID)
+                         
+                         simp_counts = simp_group |>
+                           left_join(simp_data, by = "siteID") |>
+                           relocate(location, .after = provider) |>
+                           relocate(geometry, .after = count_max)
+                         
+                         return(simp_counts)
+                       }))
+      
+      aggregated_counts$nearest_edge = st_nearest_feature(aggregated_counts,
+                                                          rnet,
+                                                          check_crs = T)
+      
+      val_counts = cbind(aggregated_counts,
+                         st_drop_geometry(rnet)[aggregated_counts$nearest_edge, ])
+      
+      
+      
+      
+      bw <- bw.gwr(
+        formula = bicycle ~ count_mean + 0,
+        approach = "AIC",
+        adaptive = T,
+        data = as_Spatial(val_counts)
+      )
+      gwr.mod <- gwr.basic(
+        formula = bicycle ~ count_mean + 0,
+        adaptive = T,
+        data = as_Spatial(val_counts),
+        bw = bw
+      )
+      
+      return(gwr.mod)
+      
+    })
+  names(reg_rnet) = lst_names
+  
+  return(reg_rnet)
+}
+
+
+## ----eval=FALSE,echo=FALSE----------------------------------------------------
+#> val_results_gwr = lapply(networks_files,
+#>                      rnet_val_gwr,
+#>                      counts = sf_counts
+#>                      )
+#> 
+
+
+## ----include=FALSE,eval=FALSE-------------------------------------------------
+#> saveRDS(val_results_gwr,
+#>         file = "interim_results/val_results_gwr.Rds")
+
+
+## ----include=FALSE------------------------------------------------------------
+val_results_gwr = readRDS("interim_results/val_results_gwr.Rds")
+
+
+## -----------------------------------------------------------------------------
+library(broom)
+val_results_gwr_flat = val_results_gwr |>
+  list_flatten(name_spec = "{inner}")
+
+bind_cols(tibble(network = names(val_results_gwr_flat)),
+          do.call(rbind,lapply(val_results_gwr_flat,function(tlm){
+            tsumm = c(summary(tlm$SDF@data[, 1])[3:4],tlm$GW.diagnostic$gw.R2)
+            
+            }
+            )
+            )
+          ) |> rename(R2 = V3)
 
 
 ## ----echo=FALSE---------------------------------------------------------------
