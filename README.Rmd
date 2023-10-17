@@ -609,6 +609,149 @@ bind_cols(tibble(network = names(val_results_flat)),
           )
 ```
 
+### Geographical Weighted Regression
+
+```{r}
+library(GWmodel)
+
+rnet_val_gwr = function(rnet_path, counts) {
+  # Loading the network RDS file
+  rnet_nested_list = read_rds(rnet_path)
+  
+  # Detecting the name of the main purpose
+  main_rnet_name = str_extract(rnet_path, "(commute|school)")
+  
+  # Flattening the list
+  rnet_flat_list = rnet_nested_list |> list_flatten()
+  
+  
+  lst_names = paste(main_rnet_name, names(rnet_flat_list), sep = ".")
+  
+  # Assigning names to the lists
+  names(rnet_flat_list) = lst_names
+  
+  reg_rnet =
+    lapply(lst_names, function(rnet_name) {
+      rnet = rnet_flat_list[[rnet_name]]
+      
+      # Creating buffer
+      rnet_buffer20 = rnet |>
+        st_union() |>
+        st_buffer(dist = 20)
+      
+      # Subsetting counts based on buffer
+      counts_selected = counts[rnet_buffer20, ]
+      
+      # Creating buffer around counts 30 m
+      counts_buf30 = st_buffer(counts_selected, dist = 30)
+      
+      # Finding overlapping counts
+      counts_overlap_30 = st_intersects(counts_buf30, counts_buf30)
+      
+      # Processing overlaps and aggregating if possible
+      aggregated_counts =
+        do.call(rbind,
+                lapply(unique(counts_overlap_30),
+                       function(x) {
+                         tmp_group = counts_selected[x,]
+                         
+                         # Count aggreagation
+                         simp_data = tmp_group |>
+                           # Removing the direction from the location string
+                           mutate(location = str_remove(location,
+                                                        "\\s\\w*bound")) |>
+                           st_drop_geometry() |>
+                           # Extracting the first value for the siteID,
+                           # provider and adds up the counts for sites with
+                           # the same 'location'
+                           summarise(across(c("siteID", "provider"),
+                                            \(x) head(x, n = 1)),
+                                     across(starts_with("count_"), sum),
+                                     .by =  "location")
+                         
+                         simp_group = tmp_group |>
+                           select(siteID) |>
+                           filter(siteID %in% simp_data$siteID)
+                         
+                         simp_counts = simp_group |>
+                           left_join(simp_data, by = "siteID") |>
+                           relocate(location, .after = provider) |>
+                           relocate(geometry, .after = count_max)
+                         
+                         return(simp_counts)
+                       }))
+      
+      aggregated_counts$nearest_edge = st_nearest_feature(aggregated_counts,
+                                                          rnet,
+                                                          check_crs = T)
+      
+      val_counts = cbind(aggregated_counts,
+                         st_drop_geometry(rnet)[aggregated_counts$nearest_edge, ])
+      
+      
+      
+      
+      bw <- bw.gwr(
+        formula = bicycle ~ count_mean + 0,
+        approach = "AIC",
+        adaptive = T,
+        data = as_Spatial(val_counts)
+      )
+      gwr.mod <- gwr.basic(
+        formula = bicycle ~ count_mean + 0,
+        adaptive = T,
+        data = as_Spatial(val_counts),
+        bw = bw
+      )
+      
+      return(gwr.mod)
+      
+    })
+  names(reg_rnet) = lst_names
+  
+  return(reg_rnet)
+}
+```
+
+As in the previous attempt, the following code runs the validation using 
+a GWR model.
+
+```{r,eval=FALSE,echo=FALSE}
+val_results_gwr = lapply(networks_files,
+                     rnet_val_gwr,
+                     counts = sf_counts
+                     )
+
+```
+
+```{r,include=FALSE,eval=FALSE}
+saveRDS(val_results_gwr,
+        file = "interim_results/val_results_gwr.Rds")
+```
+
+
+```{r,include=FALSE}
+val_results_gwr = readRDS("interim_results/val_results_gwr.Rds")
+```
+
+Summarising the high-level results for all networks for the GWR model:
+
+```{r}
+library(broom)
+val_results_gwr_flat = val_results_gwr |>
+  list_flatten(name_spec = "{inner}")
+
+bind_cols(tibble(network = names(val_results_gwr_flat)),
+          do.call(rbind,lapply(val_results_gwr_flat,function(tlm){
+            tsumm = c(summary(tlm$SDF@data[, 1])[3:4],tlm$GW.diagnostic$gw.R2)
+            
+            }
+            )
+            )
+          ) |> rename(R2 = V3)
+```
+
+
 ```{r, echo=FALSE}
 # Convert README.Rmd to counts.R:  
 knitr::purl("README.Rmd", "counts.R")
