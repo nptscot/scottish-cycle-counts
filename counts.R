@@ -624,7 +624,7 @@ rnet_val_gwr = function(rnet_path, counts) {
 
 
 ## ----eval=FALSE,echo=FALSE----------------------------------------------------
-#> val_results_gwr = lapply(networks_files,
+#> val_results_gwr = lapply(networks_files[1],
 #>                      rnet_val_gwr,
 #>                      counts = sf_counts
 #>                      )
