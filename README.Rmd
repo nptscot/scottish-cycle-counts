@@ -467,8 +467,8 @@ summary(lm_app2)
 Downloading the data from latest builds
 ```{r, eval=FALSE, warning=FALSE}
 setwd("../npt/outputdata")
-system("gh release download v2023-09-10-17-43-21.109279_commit_86ae338b12f523c27fcc290f48105f2e5dbdcab7")
-system("gh release download v2023-08-18-10-42-44_commit_cbb84b024550d638dbca066c5850d1b03d55fc66 --skip-existing")
+system("gh release download v2023-08-18-10-42-44_commit_cbb84b024550d638dbca066c5850d1b03d55fc66 --clobber")
+system("gh release download v2023-09-10-17-43-21.109279_commit_86ae338b12f523c27fcc290f48105f2e5dbdcab7 --clobber")
 ```
 
 
@@ -560,7 +560,7 @@ rnet_val = function(rnet_path,counts){
   
   
   
-  lm_counts = lm(bicycle ~ count_mean+0,data = val_counts)
+  lm_counts = lm(bicycle ~ count_mean,data = val_counts)
   
   return(lm_counts)
     
@@ -692,13 +692,13 @@ rnet_val_gwr = function(rnet_path, counts) {
       
       
       bw <- bw.gwr(
-        formula = bicycle ~ count_mean + 0,
+        formula = bicycle ~ count_mean,
         approach = "AIC",
         adaptive = T,
         data = as_Spatial(val_counts)
       )
       gwr.mod <- gwr.basic(
-        formula = bicycle ~ count_mean + 0,
+        formula = bicycle ~ count_mean,
         adaptive = T,
         data = as_Spatial(val_counts),
         bw = bw
@@ -717,7 +717,7 @@ As in the previous attempt, the following code runs the validation using
 a GWR model.
 
 ```{r,eval=FALSE,echo=FALSE}
-val_results_gwr = lapply(networks_files[1],
+val_results_gwr = lapply(networks_files,
                      rnet_val_gwr,
                      counts = sf_counts
                      )
