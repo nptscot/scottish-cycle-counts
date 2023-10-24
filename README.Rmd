@@ -268,10 +268,7 @@ rnet_commute = read_rds("../npt/outputs/rnet_commute.Rds")
 rnet_commute
 ```
 
-
-
-An `sf` object is created from the `clean_counts` data frame. AADF for each
-counts are joined using the `siteID`
+An `sf` object is created from the `clean_counts` data frame. AADF for each counts are joined using the `siteID`
 
 ```{r}
 sf_counts = clean_counts |>
@@ -461,24 +458,30 @@ lm_app2 = lm(bicycle ~ count_mean+0,data = val_app2)
 summary(lm_app2)
 ```
 
+## Validation of the complete network builds
 
-## New networks
+### Loading the data
 
-Downloading the data from latest builds
+Downloading the data from latest builds. RDS objects with the list of networks have been selected for this analysis
+
 ```{r, eval=FALSE, warning=FALSE}
-setwd("../npt/outputdata")
+oldwd <- setwd("../npt/outputdata")
 system("gh release download v2023-08-18-10-42-44_commit_cbb84b024550d638dbca066c5850d1b03d55fc66 --clobber")
 system("gh release download v2023-09-10-17-43-21.109279_commit_86ae338b12f523c27fcc290f48105f2e5dbdcab7 --clobber")
+setwd(oldwd)
 ```
 
+We select the ones that contain the naming pattern with a regular expression.
 
-From all RDS files, we select the ones that contain the networks as a list
 ```{r}
 networks_files = list.files(path = "../npt/outputdata/",pattern = "^rnet.*_list",full.names = TRUE)
 networks_files              
 ```
-The following function is prepared to run the analysis as per the second
-approach
+
+### Global Linear Regression Model
+
+The following function is prepared to run the analysis as per the second approach. Note that the linear model used for the evaluation does not include an intercept.
+
 ```{r}
 library(purrr)
 
@@ -560,7 +563,7 @@ rnet_val = function(rnet_path,counts){
   
   
   
-  lm_counts = lm(bicycle ~ count_mean,data = val_counts)
+  lm_counts = lm(bicycle ~ count_mean + 0,data = val_counts)
   
   return(lm_counts)
     
@@ -571,7 +574,6 @@ rnet_val = function(rnet_path,counts){
 }
 ```
 
-
 The following code runs the validation for each network
 
 ```{r,eval=FALSE}
@@ -579,7 +581,6 @@ val_results = lapply(networks_files,
                      rnet_val,
                      counts = sf_counts
                      )
-
 ```
 
 ```{r,include=FALSE,eval=FALSE}
@@ -587,7 +588,6 @@ dir.create("interim_results")
 saveRDS(val_results,
         file = "interim_results/val_results.Rds")
 ```
-
 
 ```{r,include=FALSE}
 val_results = readRDS("interim_results/val_results.Rds")
@@ -599,17 +599,22 @@ Summarising the high-level results for all networks:
 library(broom)
 val_results_flat = val_results |> list_flatten(name_spec = "{inner}")
 
-bind_cols(tibble(network = names(val_results_flat)),
-          do.call(bind_rows,lapply(val_results_flat,function(tlm){
-            bind_cols(fit = glance(tlm) |> select(adj.r.squared),
-                      tidy(tlm) |> select(estimate,std.error))
-            }
-            )
-            )
-          )
+tbl_val_results = tibble(network = names(val_results_flat),
+                         intercept = 0,
+                         coef = vapply(val_results_flat,coef,FUN.VALUE = 0),
+                         R2 = vapply(val_results_flat,\(x) summary(x)$adj.r.squared,FUN.VALUE = 0)
+       )
+
+tbl_val_results
+```
+
+```{r}
+rm(val_results,val_results_flat)
 ```
 
 ### Geographical Weighted Regression
+
+Given that the proportion of trips by purpose might vary spatially, e.g. urban areas might have a higher proportion of commuting trips. A weighted geographical model is implemented. The default bi-square function is used to determine the kernel bandwidth.
 
 ```{r}
 library(GWmodel)
@@ -713,8 +718,7 @@ rnet_val_gwr = function(rnet_path, counts) {
 }
 ```
 
-As in the previous attempt, the following code runs the validation using 
-a GWR model.
+As in the previous attempt, the following code runs the validation using a GWR model.
 
 ```{r,eval=FALSE,echo=FALSE}
 val_results_gwr = lapply(networks_files,
@@ -729,7 +733,6 @@ saveRDS(val_results_gwr,
         file = "interim_results/val_results_gwr.Rds")
 ```
 
-
 ```{r,include=FALSE}
 val_results_gwr = readRDS("interim_results/val_results_gwr.Rds")
 ```
@@ -741,19 +744,41 @@ library(broom)
 val_results_gwr_flat = val_results_gwr |>
   list_flatten(name_spec = "{inner}")
 
-bind_cols(tibble(network = names(val_results_gwr_flat)),
-          do.call(rbind,lapply(val_results_gwr_flat,function(tlm){
-            tsumm = c(summary(tlm$SDF@data[, 1])[3:4],tlm$GW.diagnostic$gw.R2)
-            
-            }
-            )
-            )
-          ) |> rename(R2 = V3)
+tbl_val_gwr_results = tibble(network = names(val_results_gwr_flat),
+       mean_intercept = vapply(val_results_gwr_flat,\(x) mean(x$SDF@data[, 1]),FUN.VALUE = 0),
+       median_intercept = vapply(val_results_gwr_flat,\(x) median(x$SDF@data[, 1]),FUN.VALUE = 0),
+       mean_coef = vapply(val_results_gwr_flat,\(x) mean(x$SDF@data[, 2]),FUN.VALUE = 0),
+       median_coef = vapply(val_results_gwr_flat,\(x) median(x$SDF@data[, 2]),FUN.VALUE = 0),
+       bw = vapply(val_results_gwr_flat,\(x) x$GW.arguments$bw,FUN.VALUE = 0),
+       R2 = vapply(val_results_gwr_flat,\(x) x$GW.diagnostic$gw.R2,FUN.VALUE = 0)
+       )
+
+tbl_val_gwr_results
 ```
+
+### Results
+
+The following table compares the results of the two approaches.
+
+```{r,echo=FALSE}
+library(kableExtra)
+library(knitr)
+tbl_val_gwr_results |>
+  left_join(tbl_val_results,by="network",suffix = c("",".")) |> 
+  separate_wider_delim(network,delim = ".",names = c("Purpose","Type")) |> 
+  kbl(digits=4) |>
+  kable_classic_2("hover", full_width = T) |>
+  add_header_above(c(" " = 2, "GWR" = 6, "Global" = 3)) |> 
+  column_spec(1, bold = T) |> 
+  collapse_rows(columns = 1:2, valign = "top") |>
+  as_image(width = 7,file = "README_files/figure-gfm/model_table.png")
+```
+
+
+![](README_files/figure-gfm/model_table.png)
 
 
 ```{r, echo=FALSE}
 # Convert README.Rmd to counts.R:  
 knitr::purl("README.Rmd", "counts.R")
 ```
-

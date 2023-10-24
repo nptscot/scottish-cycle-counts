@@ -387,9 +387,10 @@ summary(lm_app2)
 
 
 ## ----eval=FALSE, warning=FALSE------------------------------------------------
-#> setwd("../npt/outputdata")
-#> system("gh release download v2023-09-10-17-43-21.109279_commit_86ae338b12f523c27fcc290f48105f2e5dbdcab7")
-#> system("gh release download v2023-08-18-10-42-44_commit_cbb84b024550d638dbca066c5850d1b03d55fc66 --skip-existing")
+#> oldwd <- setwd("../npt/outputdata")
+#> system("gh release download v2023-08-18-10-42-44_commit_cbb84b024550d638dbca066c5850d1b03d55fc66 --clobber")
+#> system("gh release download v2023-09-10-17-43-21.109279_commit_86ae338b12f523c27fcc290f48105f2e5dbdcab7 --clobber")
+#> setwd(oldwd)
 
 
 ## -----------------------------------------------------------------------------
@@ -478,7 +479,7 @@ rnet_val = function(rnet_path,counts){
   
   
   
-  lm_counts = lm(bicycle ~ count_mean+0,data = val_counts)
+  lm_counts = lm(bicycle ~ count_mean + 0,data = val_counts)
   
   return(lm_counts)
     
@@ -494,7 +495,6 @@ rnet_val = function(rnet_path,counts){
 #>                      rnet_val,
 #>                      counts = sf_counts
 #>                      )
-#> 
 
 
 ## ----include=FALSE,eval=FALSE-------------------------------------------------
@@ -511,14 +511,17 @@ val_results = readRDS("interim_results/val_results.Rds")
 library(broom)
 val_results_flat = val_results |> list_flatten(name_spec = "{inner}")
 
-bind_cols(tibble(network = names(val_results_flat)),
-          do.call(bind_rows,lapply(val_results_flat,function(tlm){
-            bind_cols(fit = glance(tlm) |> select(adj.r.squared),
-                      tidy(tlm) |> select(estimate,std.error))
-            }
-            )
-            )
-          )
+tbl_val_results = tibble(network = names(val_results_flat),
+                         intercept = 0,
+                         coef = vapply(val_results_flat,coef,FUN.VALUE = 0),
+                         R2 = vapply(val_results_flat,\(x) summary(x)$adj.r.squared,FUN.VALUE = 0)
+       )
+
+tbl_val_results
+
+
+## -----------------------------------------------------------------------------
+rm(val_results,val_results_flat)
 
 
 ## -----------------------------------------------------------------------------
@@ -602,13 +605,13 @@ rnet_val_gwr = function(rnet_path, counts) {
       
       
       bw <- bw.gwr(
-        formula = bicycle ~ count_mean + 0,
+        formula = bicycle ~ count_mean,
         approach = "AIC",
         adaptive = T,
         data = as_Spatial(val_counts)
       )
       gwr.mod <- gwr.basic(
-        formula = bicycle ~ count_mean + 0,
+        formula = bicycle ~ count_mean,
         adaptive = T,
         data = as_Spatial(val_counts),
         bw = bw
@@ -624,7 +627,7 @@ rnet_val_gwr = function(rnet_path, counts) {
 
 
 ## ----eval=FALSE,echo=FALSE----------------------------------------------------
-#> val_results_gwr = lapply(networks_files[1],
+#> val_results_gwr = lapply(networks_files,
 #>                      rnet_val_gwr,
 #>                      counts = sf_counts
 #>                      )
@@ -645,14 +648,30 @@ library(broom)
 val_results_gwr_flat = val_results_gwr |>
   list_flatten(name_spec = "{inner}")
 
-bind_cols(tibble(network = names(val_results_gwr_flat)),
-          do.call(rbind,lapply(val_results_gwr_flat,function(tlm){
-            tsumm = c(summary(tlm$SDF@data[, 1])[3:4],tlm$GW.diagnostic$gw.R2)
-            
-            }
-            )
-            )
-          ) |> rename(R2 = V3)
+tbl_val_gwr_results = tibble(network = names(val_results_gwr_flat),
+       mean_intercept = vapply(val_results_gwr_flat,\(x) mean(x$SDF@data[, 1]),FUN.VALUE = 0),
+       median_intercept = vapply(val_results_gwr_flat,\(x) median(x$SDF@data[, 1]),FUN.VALUE = 0),
+       mean_coef = vapply(val_results_gwr_flat,\(x) mean(x$SDF@data[, 2]),FUN.VALUE = 0),
+       median_coef = vapply(val_results_gwr_flat,\(x) median(x$SDF@data[, 2]),FUN.VALUE = 0),
+       bw = vapply(val_results_gwr_flat,\(x) x$GW.arguments$bw,FUN.VALUE = 0),
+       R2 = vapply(val_results_gwr_flat,\(x) x$GW.diagnostic$gw.R2,FUN.VALUE = 0)
+       )
+
+tbl_val_gwr_results
+
+
+## ----echo=FALSE---------------------------------------------------------------
+library(kableExtra)
+library(knitr)
+tbl_val_gwr_results |>
+  left_join(tbl_val_results,by="network",suffix = c("",".")) |> 
+  separate_wider_delim(network,delim = ".",names = c("Purpose","Type")) |> 
+  kbl(digits=4) |>
+  kable_classic_2("hover", full_width = T) |>
+  add_header_above(c(" " = 2, "GWR" = 6, "Global" = 3)) |> 
+  column_spec(1, bold = T) |> 
+  collapse_rows(columns = 1:2, valign = "top") |>
+  as_image(width = 7,file = "README_files/figure-gfm/model_table.png")
 
 
 ## ----echo=FALSE---------------------------------------------------------------
