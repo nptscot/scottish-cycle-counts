@@ -660,7 +660,7 @@ tbl_val_gwr_results = tibble(network = names(val_results_gwr_flat),
 tbl_val_gwr_results
 
 
-## ----echo=FALSE---------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(kableExtra)
 library(knitr)
 tbl_val_gwr_results |>
@@ -672,6 +672,144 @@ tbl_val_gwr_results |>
   column_spec(1, bold = T) |> 
   collapse_rows(columns = 1:2, valign = "top") |>
   as_image(width = 7,file = "README_files/figure-gfm/model_table.png")
+
+
+## ----eval=FALSE---------------------------------------------------------------
+#> oldwd <- setwd("../npt/outputdata")
+#> system("gh release download v2023-10-18-08-46-09.827274_commit_57d2dcdd739f665bb8d3fb5540cb6bbd10fcb08f -p combined_network_tile.zip")
+#> unzip("combined_network_tile.zip")
+#> setwd(oldwd)
+
+
+## -----------------------------------------------------------------------------
+combined_network = st_read(dsn = "../npt/outputdata/combined_network_tile.geojson")
+combined_network
+
+
+## -----------------------------------------------------------------------------
+tmap_mode("plot")
+qtm(combined_network)
+
+
+## -----------------------------------------------------------------------------
+cnet_val_gwr = function(cnet, counts) {
+  lst_names = names(cnet)[grepl("_", names(cnet))]
+  
+  # Creating buffer
+  rnet_buffer20 = cnet |>
+    st_union() |>
+    st_buffer(dist = 20)
+  
+  # Subsetting counts based on buffer
+  counts_selected = counts[rnet_buffer20,]
+  
+  # Creating buffer around counts 30 m
+  counts_buf30 = st_buffer(counts_selected, dist = 30)
+  
+  # Finding overlapping counts
+  counts_overlap_30 = st_intersects(counts_buf30, counts_buf30)
+  
+  # Processing overlaps and aggregating if possible
+  aggregated_counts =
+    do.call(rbind,
+            lapply(unique(counts_overlap_30),
+                   function(x) {
+                     tmp_group = counts_selected[x, ]
+                     
+                     # Count aggreagation
+                     simp_data = tmp_group |>
+                       # Removing the direction from the location string
+                       mutate(location = str_remove(location,
+                                                    "\\s\\w*bound")) |>
+                       st_drop_geometry() |>
+                       # Extracting the first value for the siteID,
+                       # provider and adds up the counts for sites with
+                       # the same 'location'
+                       summarise(across(c("siteID", "provider"),
+                                        \(x) head(x, n = 1)),
+                                 across(starts_with("count_"), sum),
+                                 .by =  "location")
+                     
+                     simp_group = tmp_group |>
+                       select(siteID) |>
+                       filter(siteID %in% simp_data$siteID)
+                     
+                     simp_counts = simp_group |>
+                       left_join(simp_data, by = "siteID") |>
+                       relocate(location, .after = provider) |>
+                       relocate(geometry, .after = count_max)
+                     
+                     return(simp_counts)
+                   }))
+  
+  aggregated_counts$nearest_edge = st_nearest_feature(aggregated_counts,
+                                                      cnet,
+                                                      check_crs = T)
+  
+  
+  val_counts = cbind(aggregated_counts,
+                     st_drop_geometry(cnet)[aggregated_counts$nearest_edge,])
+  
+  rnet_name = lst_names[1]
+  
+  val_counts = cbind(aggregated_counts,
+                     st_drop_geometry(cnet)[aggregated_counts$nearest_edge, lst_names]) |> as_Spatial()
+  
+  
+  reg_rnet =
+    lapply(lst_names, function(rnet_name) {
+      
+      form = as.formula(paste(rnet_name, "~ count_mean"))
+      
+      bw <- bw.gwr(
+        formula = form,
+        approach = "AIC",
+        adaptive = T,
+        data = val_counts
+      )
+      gwr.mod <- gwr.basic(
+        formula = form,
+        adaptive = T,
+        data = val_counts,
+        bw = bw
+      )
+      
+      return(gwr.mod)
+      
+    })
+  names(reg_rnet) = lst_names
+  
+  return(reg_rnet)
+}
+
+
+## ----eval=FALSE---------------------------------------------------------------
+#> val_results_gwr_last = cnet_val_gwr(cnet = combined_network,counts = sf_counts)
+
+
+## ----eval=FALSE,include=FALSE-------------------------------------------------
+#> saveRDS(val_results_gwr_last,
+#>         file = "interim_results/val_results_gwr_last.Rds")
+
+
+## ----include=FALSE------------------------------------------------------------
+val_results_gwr_last = read_rds("interim_results/val_results_gwr_last.Rds")
+
+
+## -----------------------------------------------------------------------------
+tbl_val_gwr_results_last = tibble(network = names(val_results_gwr_last),
+                                  mean_intercept = vapply(val_results_gwr_last,\(x) mean(x$SDF@data[, 1]),FUN.VALUE = 0),
+                                  median_intercept = vapply(val_results_gwr_last,\(x) median(x$SDF@data[, 1]),FUN.VALUE = 0),
+                                  mean_coef = vapply(val_results_gwr_last,\(x) mean(x$SDF@data[, 2]),FUN.VALUE = 0),
+                                  median_coef = vapply(val_results_gwr_last,\(x) median(x$SDF@data[, 2]),FUN.VALUE = 0),
+                                  bw = vapply(val_results_gwr_last,\(x) x$GW.arguments$bw,FUN.VALUE = 0),
+                                  R2 = vapply(val_results_gwr_last,\(x) x$GW.diagnostic$gw.R2,FUN.VALUE = 0)
+       )
+
+tbl_val_gwr_results_last |>
+  kbl(digits=4) |>
+  kable_classic_2("hover", full_width = T) |>
+  as_image(width = 7,file = "README_files/figure-gfm/val_last_table.png")
 
 
 ## ----echo=FALSE---------------------------------------------------------------
