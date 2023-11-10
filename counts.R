@@ -812,6 +812,154 @@ tbl_val_gwr_results_last |>
   as_image(width = 7,file = "README_files/figure-gfm/val_last_table.png")
 
 
+## -----------------------------------------------------------------------------
+combined_network = st_read(dsn = "../npt/outputdata/combined_network_tile.geojson")
+
+
+## -----------------------------------------------------------------------------
+cnet_val_gwr_AADT = function(cnet, counts) {
+  lst_names = names(cnet)[grepl("_", names(cnet))]
+  
+  # Creating buffer
+  rnet_buffer30 = cnet |>
+    st_union() |>
+    st_buffer(dist = 20)
+  
+  # Subsetting counts based on buffer
+  counts_selected = counts[rnet_buffer20,]
+  
+  # Creating buffer around counts 30 m
+  counts_buf30 = st_buffer(counts_selected, dist = 30)
+  
+  # Finding overlapping counts
+  counts_overlap_30 = st_intersects(counts_buf30, counts_buf30)
+  
+  # Processing overlaps and aggregating if possible
+  aggregated_counts =
+    do.call(rbind,
+            lapply(unique(counts_overlap_30),
+                   function(x) {
+                     tmp_group = counts_selected[x, ]
+                     
+                     # Count aggreagation
+                     simp_data = tmp_group |>
+                       # Removing the direction from the location string
+                       mutate(location = str_remove(location,
+                                                    "\\s\\w*bound")) |>
+                       st_drop_geometry() |>
+                       # Extracting the first value for the siteID,
+                       # provider and adds up the counts for sites with
+                       # the same 'location'
+                       summarise(across(c("siteID", "provider"),
+                                        \(x) head(x, n = 1)),
+                                 across(starts_with("count_"), sum),
+                                 .by =  "location")
+                     
+                     simp_group = tmp_group |>
+                       select(siteID) |>
+                       filter(siteID %in% simp_data$siteID)
+                     
+                     simp_counts = simp_group |>
+                       left_join(simp_data, by = "siteID") |>
+                       relocate(location, .after = provider) |>
+                       relocate(geometry, .after = count_max)
+                     
+                     return(simp_counts)
+                   }))
+  
+  
+  # Buffer for the aggregated counts
+  aggr_countrs_buffer = st_buffer(aggregated_counts, dist = 20)
+  
+  # Subsetting the network based on the buffer
+  cnet_selected = cnet[aggr_countrs_buffer,]
+  
+  # Spatial join to detect the network links within the buffer
+    Agg_network_siteID = cnet_selected |>
+    st_join(aggr_countrs_buffer) |>
+    st_drop_geometry() |>
+    select(all_fastest_bicycle:secondary_quietest_bicycle_go_dutch,
+           siteID) |>
+    summarise(across(contains("bicycle"), sum), .by = siteID)
+  
+  
+  # Join with the aggregated counts and factoring for AADT
+  val_counts = aggregated_counts |>
+    left_join(Agg_network_siteID, by = "siteID") |>
+    # Hard-coded AADT factors
+    mutate(across(contains("commute"), \(x) x * 1.7373),
+           across(contains("ary"), \(x) x * 1.5947)) |>
+    mutate(across(
+      contains('all'),
+      ~ get(str_replace(cur_column(), "^all", "commute")) +
+        get(str_replace(cur_column(), "^all", "primary")) +
+        get(str_replace(cur_column(), "^all", "secondary"))
+    )) |>
+    drop_na(all_fastest_bicycle:secondary_quietest_bicycle_go_dutch) |>
+    as_Spatial()
+  
+  reg_rnet =
+    lapply(lst_names, function(rnet_name) {
+      
+      form = as.formula(paste(rnet_name, "~ count_mean + 0"))
+      
+      bw <- bw.gwr(
+        formula = form,
+        approach = "AIC",
+        adaptive = T,
+        data = val_counts
+      )
+      gwr.mod <- gwr.basic(
+        formula = form,
+        adaptive = T,
+        data = val_counts,
+        bw = bw
+      )
+      
+      return(gwr.mod)
+      
+    })
+  names(reg_rnet) = lst_names
+  
+  return(reg_rnet)
+}
+
+
+## -----------------------------------------------------------------------------
+val_results_gwr_last_AADT = cnet_val_gwr_AADT(cnet = combined_network,counts = sf_counts)
+
+## -----------------------------------------------------------------------------
+tbl_val_gwr_results_last_AADT = tibble(
+  network = names(val_results_gwr_last_AADT),
+  mean_coef = vapply(val_results_gwr_last_AADT, \(x) mean(x$SDF@data[, 1]), FUN.VALUE = 0),
+  median_coef = vapply(val_results_gwr_last_AADT, \(x) median(x$SDF@data[, 1]), FUN.VALUE = 0)
+  ,
+  bw = vapply(val_results_gwr_last_AADT, \(x) x$GW.arguments$bw, FUN.VALUE = 0),
+  R2 = vapply(val_results_gwr_last_AADT, \(x) x$GW.diagnostic$gw.R2, FUN.VALUE = 0)
+)
+
+tbl_val_gwr_results_last_AADT |>
+  kbl(digits=4) |>
+  kable_classic_2("hover", full_width = T) |>
+  as_image(width = 7,file = "README_files/figure-gfm/val_last_table_AADT.png")
+
+
+## ----eval=FALSE---------------------------------------------------------------
+#> best_network = val_results_gwr_last_AADT$all_fastest_bicycle$SDF |> st_as_sf()
+#> tmap_mode("plot")
+#> mymap = tm_shape(best_network)+
+#>   tm_dots(col = "count_mean",palette = "RdYlGn",
+#>           midpoint=1,size = 0.3,alpha=0.4)+
+#>   tm_basemap()+
+#>   tm_layout(legend.position = c("left", "top"))
+#> 
+#>   tmap_save(mymap,filename = "README_files/figure-gfm/coef_maps.png",units = "cm",width = 6)
+#> 
+
+## ----echo=FALSE---------------------------------------------------------------
+include_graphics(path = "README_files/figure-gfm/coef_maps.png")
+
+
 ## ----echo=FALSE---------------------------------------------------------------
 # Convert README.Rmd to counts.R:  
 knitr::purl("README.Rmd", "counts.R")

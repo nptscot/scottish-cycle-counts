@@ -1282,5 +1282,372 @@ tbl_val_gwr_results_last |>
 
 <img src="README_files/figure-gfm/val_last_table.png" width="672" />
 
-    #>   |                                                          |                                                  |   0%  |                                                          |                                                  |   1%                      |                                                          |.                                                 |   2% [unnamed-chunk-61]                       |                                                          |..                                                |   3% [unnamed-chunk-62]   |                                                          |..                                                |   4%                      |                                                          |..                                                |   5% [unnamed-chunk-63]   |                                                          |...                                               |   6%                      |                                                          |...                                               |   7% [unnamed-chunk-64]   |                                                          |....                                              |   8%                     [unnamed-chunk-65]   |                                                          |.....                                             |   9%                      |                                                          |.....                                             |  10% [unnamed-chunk-66]   |                                                          |.....                                             |  11%                      |                                                          |......                                            |  12% [unnamed-chunk-67]                       |                                                          |.......                                           |  13% [unnamed-chunk-68]   |                                                          |.......                                           |  14%                      |                                                          |........                                          |  15% [unnamed-chunk-69]   |                                                          |........                                          |  16%                      |                                                          |........                                          |  17% [unnamed-chunk-70]   |                                                          |.........                                         |  18%                     [unnamed-chunk-71]   |                                                          |..........                                        |  19%                      |                                                          |..........                                        |  20% [unnamed-chunk-72]   |                                                          |..........                                        |  21%                      |                                                          |...........                                       |  22% [unnamed-chunk-73]                       |                                                          |............                                      |  23% [unnamed-chunk-74]   |                                                          |............                                      |  24%                      |                                                          |............                                      |  25% [unnamed-chunk-75]   |                                                          |.............                                     |  26%                      |                                                          |.............                                     |  27% [unnamed-chunk-76]   |                                                          |..............                                    |  28%                     [unnamed-chunk-77]   |                                                          |...............                                   |  29%                      |                                                          |...............                                   |  30% [unnamed-chunk-78]   |                                                          |...............                                   |  31%                      |                                                          |................                                  |  32% [unnamed-chunk-79]                       |                                                          |.................                                 |  33% [unnamed-chunk-80]   |                                                          |.................                                 |  34%                      |                                                          |..................                                |  35% [unnamed-chunk-81]   |                                                          |..................                                |  36%                      |                                                          |..................                                |  37% [unnamed-chunk-82]   |                                                          |...................                               |  38%                     [unnamed-chunk-83]   |                                                          |....................                              |  39%                      |                                                          |....................                              |  40% [unnamed-chunk-84]   |                                                          |....................                              |  41%                      |                                                          |.....................                             |  42% [unnamed-chunk-85]                       |                                                          |......................                            |  43% [unnamed-chunk-86]   |                                                          |......................                            |  44%                      |                                                          |......................                            |  45% [unnamed-chunk-87]   |                                                          |.......................                           |  46%                      |                                                          |.......................                           |  47% [unnamed-chunk-88]   |                                                          |........................                          |  48%                     [unnamed-chunk-89]   |                                                          |.........................                         |  49%                      |                                                          |.........................                         |  50% [unnamed-chunk-90]   |                                                          |.........................                         |  51%                      |                                                          |..........................                        |  52% [unnamed-chunk-91]                       |                                                          |...........................                       |  53% [unnamed-chunk-92]   |                                                          |...........................                       |  54%                      |                                                          |............................                      |  55% [unnamed-chunk-93]   |                                                          |............................                      |  56%                      |                                                          |............................                      |  57% [unnamed-chunk-94]   |                                                          |.............................                     |  58%                     [unnamed-chunk-95]   |                                                          |..............................                    |  59%                      |                                                          |..............................                    |  60% [unnamed-chunk-96]   |                                                          |..............................                    |  61%                      |                                                          |...............................                   |  62% [unnamed-chunk-97]                       |                                                          |................................                  |  63% [unnamed-chunk-98]   |                                                          |................................                  |  64%                      |                                                          |................................                  |  65% [unnamed-chunk-99]   |                                                          |.................................                 |  66%                      |                                                          |.................................                 |  67% [unnamed-chunk-100]  |                                                          |..................................                |  68%                     [unnamed-chunk-101]  |                                                          |...................................               |  69%                      |                                                          |...................................               |  70% [unnamed-chunk-102]  |                                                          |...................................               |  71%                      |                                                          |....................................              |  72% [unnamed-chunk-103]                      |                                                          |.....................................             |  73% [unnamed-chunk-104]  |                                                          |.....................................             |  74%                      |                                                          |......................................            |  75% [unnamed-chunk-105]  |                                                          |......................................            |  76%                      |                                                          |......................................            |  77% [unnamed-chunk-106]  |                                                          |.......................................           |  78%                     [unnamed-chunk-107]  |                                                          |........................................          |  79%                      |                                                          |........................................          |  80% [unnamed-chunk-108]  |                                                          |........................................          |  81%                      |                                                          |.........................................         |  82% [unnamed-chunk-109]                      |                                                          |..........................................        |  83% [unnamed-chunk-110]  |                                                          |..........................................        |  84%                      |                                                          |..........................................        |  85% [unnamed-chunk-111]  |                                                          |...........................................       |  86%                      |                                                          |...........................................       |  87% [unnamed-chunk-112]  |                                                          |............................................      |  88%                     [unnamed-chunk-113]  |                                                          |.............................................     |  89%                      |                                                          |.............................................     |  90% [unnamed-chunk-114]  |                                                          |.............................................     |  91%                      |                                                          |..............................................    |  92% [unnamed-chunk-115]                      |                                                          |...............................................   |  93% [unnamed-chunk-116]  |                                                          |...............................................   |  94%                      |                                                          |................................................  |  95% [unnamed-chunk-117]  |                                                          |................................................  |  96%                      |                                                          |................................................  |  97% [unnamed-chunk-118]  |                                                          |................................................. |  98%                     [unnamed-chunk-119]  |                                                          |..................................................|  99%                      |                                                          |..................................................| 100% [unnamed-chunk-120]
+## Applying AADT factors
+
+The number of trips in the latest build has not been expanded to AADT
+counts. Using the factors estimated in
+(here)\[<https://github.com/nptscot/TT_-Scottish_Household_Survey/commit/2869f2ac845924bf51f3d5262c3f7579f362bdfa>\],
+the values will be adjusted.
+
+Also, the number of trips considered for each count will now include the
+links within a 20 m buffer. It is worth noting that this comparison
+assumes the intercept as 0.
+
+### Loading the data
+
+``` r
+combined_network = st_read(dsn = "../npt/outputdata/combined_network_tile.geojson")
+#> Reading layer `combined_network_tile' from data source 
+#>   `C:\Users\ts18jpf\OneDrive - University of Leeds\03_PhD\00_Misc_projects\npt\outputdata\combined_network_tile.geojson' 
+#>   using driver `GeoJSON'
+#> Simple feature collection with 563466 features and 26 fields
+#> Geometry type: LINESTRING
+#> Dimension:     XY
+#> Bounding box:  xmin: -7.54343 ymin: 54.67982 xmax: -0.8615 ymax: 60.76383
+#> Geodetic CRS:  WGS 84
+```
+
+Redefining the function to apply the expansion factor and the buffer for
+the counts.
+
+``` r
+cnet_val_gwr_AADT = function(cnet, counts) {
+  lst_names = names(cnet)[grepl("_", names(cnet))]
+  
+  # Creating buffer
+  rnet_buffer30 = cnet |>
+    st_union() |>
+    st_buffer(dist = 20)
+  
+  # Subsetting counts based on buffer
+  counts_selected = counts[rnet_buffer20,]
+  
+  # Creating buffer around counts 30 m
+  counts_buf30 = st_buffer(counts_selected, dist = 30)
+  
+  # Finding overlapping counts
+  counts_overlap_30 = st_intersects(counts_buf30, counts_buf30)
+  
+  # Processing overlaps and aggregating if possible
+  aggregated_counts =
+    do.call(rbind,
+            lapply(unique(counts_overlap_30),
+                   function(x) {
+                     tmp_group = counts_selected[x, ]
+                     
+                     # Count aggreagation
+                     simp_data = tmp_group |>
+                       # Removing the direction from the location string
+                       mutate(location = str_remove(location,
+                                                    "\\s\\w*bound")) |>
+                       st_drop_geometry() |>
+                       # Extracting the first value for the siteID,
+                       # provider and adds up the counts for sites with
+                       # the same 'location'
+                       summarise(across(c("siteID", "provider"),
+                                        \(x) head(x, n = 1)),
+                                 across(starts_with("count_"), sum),
+                                 .by =  "location")
+                     
+                     simp_group = tmp_group |>
+                       select(siteID) |>
+                       filter(siteID %in% simp_data$siteID)
+                     
+                     simp_counts = simp_group |>
+                       left_join(simp_data, by = "siteID") |>
+                       relocate(location, .after = provider) |>
+                       relocate(geometry, .after = count_max)
+                     
+                     return(simp_counts)
+                   }))
+  
+  
+  # Buffer for the aggregated counts
+  aggr_countrs_buffer = st_buffer(aggregated_counts, dist = 20)
+  
+  # Subsetting the network based on the buffer
+  cnet_selected = cnet[aggr_countrs_buffer,]
+  
+  # Spatial join to detect the network links within the buffer
+    Agg_network_siteID = cnet_selected |>
+    st_join(aggr_countrs_buffer) |>
+    st_drop_geometry() |>
+    select(all_fastest_bicycle:secondary_quietest_bicycle_go_dutch,
+           siteID) |>
+    summarise(across(contains("bicycle"), sum), .by = siteID)
+  
+  
+  # Join with the aggregated counts and factoring for AADT
+  val_counts = aggregated_counts |>
+    left_join(Agg_network_siteID, by = "siteID") |>
+    # Hard-coded AADT factors
+    mutate(across(contains("commute"), \(x) x * 1.7373),
+           across(contains("ary"), \(x) x * 1.5947)) |>
+    mutate(across(
+      contains('all'),
+      ~ get(str_replace(cur_column(), "^all", "commute")) +
+        get(str_replace(cur_column(), "^all", "primary")) +
+        get(str_replace(cur_column(), "^all", "secondary"))
+    )) |>
+    drop_na(all_fastest_bicycle:secondary_quietest_bicycle_go_dutch) |>
+    as_Spatial()
+  
+  reg_rnet =
+    lapply(lst_names, function(rnet_name) {
+      
+      form = as.formula(paste(rnet_name, "~ count_mean + 0"))
+      
+      bw <- bw.gwr(
+        formula = form,
+        approach = "AIC",
+        adaptive = T,
+        data = val_counts
+      )
+      gwr.mod <- gwr.basic(
+        formula = form,
+        adaptive = T,
+        data = val_counts,
+        bw = bw
+      )
+      
+      return(gwr.mod)
+      
+    })
+  names(reg_rnet) = lst_names
+  
+  return(reg_rnet)
+}
+```
+
+``` r
+val_results_gwr_last_AADT = cnet_val_gwr_AADT(cnet = combined_network,counts = sf_counts)
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 321.4634 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 321.5054 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 321.4634 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 381.5359 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 381.5944 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 381.5359 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 384.0953 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 384.1464 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 384.0953 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 327.8732 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 328.0741 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 327.8732 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 399.2125 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 399.3746 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 399.2125 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 391.7051 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 391.8658 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 391.7051 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 321.1632 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 321.2059 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 321.1632 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 381.0076 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 381.0666 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 381.0076 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 382.6936 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 382.7468 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 382.6936 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 327.5555 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 327.7577 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 327.5555 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 398.5721 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 398.7332 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 398.5721 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 390.2169 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 390.3757 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 390.2169 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 104.6033 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 104.6524 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 213.5064 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 213.528 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 213.5064 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 237.8506 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 237.8561 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 112.5676 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 112.5958 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 235.536 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 235.5831 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 235.536 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 255.3882 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 255.4336 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 255.3882 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 150.975 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 150.9997 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 244.7891 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 244.8312 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 272.2366 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 272.2693 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 158.7162 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 158.7603 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 158.7162 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 256.5197 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 256.6043 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 256.5197 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 278.3833 
+#> Adaptive bandwidth (number of nearest neighbours): 19 AICc value: 278.466 
+#> Adaptive bandwidth (number of nearest neighbours): 18 AICc value: 278.3833
+```
+
+``` r
+tbl_val_gwr_results_last_AADT = tibble(
+  network = names(val_results_gwr_last_AADT),
+  mean_coef = vapply(val_results_gwr_last_AADT, \(x) mean(x$SDF@data[, 1]), FUN.VALUE = 0),
+  median_coef = vapply(val_results_gwr_last_AADT, \(x) median(x$SDF@data[, 1]), FUN.VALUE = 0)
+  ,
+  bw = vapply(val_results_gwr_last_AADT, \(x) x$GW.arguments$bw, FUN.VALUE = 0),
+  R2 = vapply(val_results_gwr_last_AADT, \(x) x$GW.diagnostic$gw.R2, FUN.VALUE = 0)
+)
+
+tbl_val_gwr_results_last_AADT |>
+  kbl(digits=4) |>
+  kable_classic_2("hover", full_width = T) |>
+  as_image(width = 7,file = "README_files/figure-gfm/val_last_table_AADT.png")
+```
+
+<img src="README_files/figure-gfm/val_last_table_AADT.png" width="672" />
+The `all_fastest_bicycle` network seems to provide the best fit compared
+to the observed counts, and considering that some trip purposes have not
+been modelled. Also the intercept is relatively low. Nonetheless, a
+closer look at the distribution of the coefficients `count_mean` (the
+ratio of estimated trips over the observed counts) shows that in
+Edinburgh the estimations are greater than the observed, while in
+Glasgow the estimates are lower than observed.
+
+``` r
+best_network = val_results_gwr_last_AADT$all_fastest_bicycle$SDF |> st_as_sf()
+tmap_mode("plot")
+mymap = tm_shape(best_network)+
+  tm_dots(col = "count_mean",palette = "RdYlGn",
+          midpoint=1,size = 0.3,alpha=0.4)+
+  tm_basemap()+
+  tm_layout(legend.position = c("left", "top")) 
+
+  tmap_save(mymap,filename = "README_files/figure-gfm/coef_maps.png",units = "cm",width = 6)
+  
+```
+
+<img src="README_files/figure-gfm/coef_maps.png" width="708" />
+
+    #>   |                                                          |                                                  |   0%  |                                                          |                                                  |   1%                      |                                                          |.                                                 |   2% [unnamed-chunk-131]                      |                                                          |..                                                |   3% [unnamed-chunk-132]  |                                                          |..                                                |   4%                      |                                                          |..                                                |   5% [unnamed-chunk-133]  |                                                          |...                                               |   5%                      |                                                          |...                                               |   6% [unnamed-chunk-134]  |                                                          |...                                               |   7%                      |                                                          |....                                              |   8% [unnamed-chunk-135]                      |                                                          |.....                                             |   9% [unnamed-chunk-136]  |                                                          |.....                                             |  10%                      |                                                          |.....                                             |  11% [unnamed-chunk-137]  |                                                          |......                                            |  12%                     [unnamed-chunk-138]  |                                                          |.......                                           |  13%                      |                                                          |.......                                           |  14% [unnamed-chunk-139]  |                                                          |.......                                           |  15%                      |                                                          |........                                          |  15% [unnamed-chunk-140]  |                                                          |........                                          |  16%                      |                                                          |........                                          |  17% [unnamed-chunk-141]  |                                                          |.........                                         |  18%                     [unnamed-chunk-142]  |                                                          |..........                                        |  19%                      |                                                          |..........                                        |  20% [unnamed-chunk-143]  |                                                          |..........                                        |  21%                      |                                                          |...........                                       |  22% [unnamed-chunk-144]                      |                                                          |............                                      |  23% [unnamed-chunk-145]  |                                                          |............                                      |  24%                      |                                                          |............                                      |  25% [unnamed-chunk-146]  |                                                          |.............                                     |  25%                      |                                                          |.............                                     |  26% [unnamed-chunk-147]  |                                                          |.............                                     |  27%                      |                                                          |..............                                    |  28% [unnamed-chunk-148]                      |                                                          |...............                                   |  29% [unnamed-chunk-149]  |                                                          |...............                                   |  30%                      |                                                          |...............                                   |  31% [unnamed-chunk-150]  |                                                          |................                                  |  32%                     [unnamed-chunk-151]  |                                                          |.................                                 |  33%                      |                                                          |.................                                 |  34% [unnamed-chunk-152]  |                                                          |.................                                 |  35%                      |                                                          |..................                                |  35% [unnamed-chunk-153]  |                                                          |..................                                |  36%                      |                                                          |..................                                |  37% [unnamed-chunk-154]  |                                                          |...................                               |  38%                     [unnamed-chunk-155]  |                                                          |....................                              |  39%                      |                                                          |....................                              |  40% [unnamed-chunk-156]  |                                                          |....................                              |  41%                      |                                                          |.....................                             |  42% [unnamed-chunk-157]                      |                                                          |......................                            |  43% [unnamed-chunk-158]  |                                                          |......................                            |  44%                      |                                                          |......................                            |  45% [unnamed-chunk-159]  |                                                          |.......................                           |  45%                      |                                                          |.......................                           |  46% [unnamed-chunk-160]  |                                                          |.......................                           |  47%                      |                                                          |........................                          |  48% [unnamed-chunk-161]                      |                                                          |.........................                         |  49% [unnamed-chunk-162]  |                                                          |.........................                         |  50%                      |                                                          |.........................                         |  51% [unnamed-chunk-163]  |                                                          |..........................                        |  52%                     [unnamed-chunk-164]  |                                                          |...........................                       |  53%                      |                                                          |...........................                       |  54% [unnamed-chunk-165]  |                                                          |...........................                       |  55%                      |                                                          |............................                      |  55% [unnamed-chunk-166]  |                                                          |............................                      |  56%                      |                                                          |............................                      |  57% [unnamed-chunk-167]  |                                                          |.............................                     |  58%                     [unnamed-chunk-168]  |                                                          |..............................                    |  59%                      |                                                          |..............................                    |  60% [unnamed-chunk-169]  |                                                          |..............................                    |  61%                      |                                                          |...............................                   |  62% [unnamed-chunk-170]                      |                                                          |................................                  |  63% [unnamed-chunk-171]  |                                                          |................................                  |  64%                      |                                                          |................................                  |  65% [unnamed-chunk-172]  |                                                          |.................................                 |  65%                      |                                                          |.................................                 |  66% [unnamed-chunk-173]  |                                                          |.................................                 |  67%                      |                                                          |..................................                |  68% [unnamed-chunk-174]                      |                                                          |...................................               |  69% [unnamed-chunk-175]  |                                                          |...................................               |  70%                      |                                                          |...................................               |  71% [unnamed-chunk-176]  |                                                          |....................................              |  72%                     [unnamed-chunk-177]  |                                                          |.....................................             |  73%                      |                                                          |.....................................             |  74% [unnamed-chunk-178]  |                                                          |.....................................             |  75%                      |                                                          |......................................            |  75% [unnamed-chunk-179]  |                                                          |......................................            |  76%                      |                                                          |......................................            |  77% [unnamed-chunk-180]  |                                                          |.......................................           |  78%                     [unnamed-chunk-181]  |                                                          |........................................          |  79%                      |                                                          |........................................          |  80% [unnamed-chunk-182]  |                                                          |........................................          |  81%                      |                                                          |.........................................         |  82% [unnamed-chunk-183]                      |                                                          |..........................................        |  83% [unnamed-chunk-184]  |                                                          |..........................................        |  84%                      |                                                          |..........................................        |  85% [unnamed-chunk-185]  |                                                          |...........................................       |  85%                      |                                                          |...........................................       |  86% [unnamed-chunk-186]  |                                                          |...........................................       |  87%                      |                                                          |............................................      |  88% [unnamed-chunk-187]                      |                                                          |.............................................     |  89% [unnamed-chunk-188]  |                                                          |.............................................     |  90%                      |                                                          |.............................................     |  91% [unnamed-chunk-189]  |                                                          |..............................................    |  92%                     [unnamed-chunk-190]  |                                                          |...............................................   |  93%                      |                                                          |...............................................   |  94% [unnamed-chunk-191]  |                                                          |...............................................   |  95%                      |                                                          |................................................  |  95% [unnamed-chunk-192]  |                                                          |................................................  |  96% [unnamed-chunk-193]  |                                                          |................................................  |  97%                      |                                                          |................................................. |  98% [unnamed-chunk-194] [unnamed-chunk-195]  |                                                          |..................................................|  99%                      |                                                          |..................................................| 100% [unnamed-chunk-196]
     #> [1] "counts.R"
