@@ -784,7 +784,8 @@ cnet_val_gwr = function(cnet, counts) {
 
 
 ## ----eval=FALSE---------------------------------------------------------------
-#> val_results_gwr_last = cnet_val_gwr(cnet = combined_network,counts = sf_counts)
+#> val_results_gwr_last = cnet_val_gwr(cnet = combined_network,
+#>                                     counts = sf_counts)
 
 
 ## ----eval=FALSE,include=FALSE-------------------------------------------------
@@ -807,26 +808,28 @@ tbl_val_gwr_results_last = tibble(network = names(val_results_gwr_last),
        )
 
 tbl_val_gwr_results_last |>
+  arrange(-R2) |> 
   kbl(digits=4) |>
   kable_classic_2("hover", full_width = T) |>
   as_image(width = 7,file = "README_files/figure-gfm/val_last_table.png")
 
 
 ## -----------------------------------------------------------------------------
-combined_network = st_read(dsn = "../npt/outputdata/combined_network_tile.geojson")
+cnet = st_read(dsn = "../npt/outputdata/combined_network_tile.geojson")
 
 
 ## -----------------------------------------------------------------------------
-cnet_val_gwr_AADT = function(cnet, counts) {
+library(GWmodel)
+cnet_val_gwr_AADT = function(cnet, sf_counts) {
   lst_names = names(cnet)[grepl("_", names(cnet))]
   
   # Creating buffer
   rnet_buffer30 = cnet |>
     st_union() |>
-    st_buffer(dist = 20)
+    st_buffer(dist = 30)
   
   # Subsetting counts based on buffer
-  counts_selected = counts[rnet_buffer20,]
+  counts_selected = sf_counts[rnet_buffer30,]
   
   # Creating buffer around counts 30 m
   counts_buf30 = st_buffer(counts_selected, dist = 30)
@@ -875,7 +878,7 @@ cnet_val_gwr_AADT = function(cnet, counts) {
   cnet_selected = cnet[aggr_countrs_buffer,]
   
   # Spatial join to detect the network links within the buffer
-    Agg_network_siteID = cnet_selected |>
+  Agg_network_siteID = cnet_selected |>
     st_join(aggr_countrs_buffer) |>
     st_drop_geometry() |>
     select(all_fastest_bicycle:secondary_quietest_bicycle_go_dutch,
@@ -926,22 +929,30 @@ cnet_val_gwr_AADT = function(cnet, counts) {
 
 
 ## -----------------------------------------------------------------------------
-val_results_gwr_last_AADT = cnet_val_gwr_AADT(cnet = combined_network,counts = sf_counts)
+set.seed(123456)
+val_results_gwr_last_AADT = cnet_val_gwr_AADT(cnet,
+                                              sf_counts)
+
 
 ## -----------------------------------------------------------------------------
+library(kableExtra)
 tbl_val_gwr_results_last_AADT = tibble(
   network = names(val_results_gwr_last_AADT),
-  mean_coef = vapply(val_results_gwr_last_AADT, \(x) mean(x$SDF@data[, 1]), FUN.VALUE = 0),
-  median_coef = vapply(val_results_gwr_last_AADT, \(x) median(x$SDF@data[, 1]), FUN.VALUE = 0)
-  ,
-  bw = vapply(val_results_gwr_last_AADT, \(x) x$GW.arguments$bw, FUN.VALUE = 0),
-  R2 = vapply(val_results_gwr_last_AADT, \(x) x$GW.diagnostic$gw.R2, FUN.VALUE = 0)
-)
+  mean_coef = vapply(val_results_gwr_last_AADT,
+                          \(x) mean(x$SDF@data[, 1]),FUN.VALUE = 0),
+  median_coef = vapply(val_results_gwr_last_AADT,
+                            \(x) median(x$SDF@data[, 1]),FUN.VALUE = 0),
+  bw = vapply(val_results_gwr_last_AADT,
+              \(x) x$GW.arguments$bw,FUN.VALUE = 0),
+  R2 = vapply(val_results_gwr_last_AADT,
+              \(x) x$GW.diagnostic$gw.R2,FUN.VALUE = 0)
+  )
 
 tbl_val_gwr_results_last_AADT |>
-  kbl(digits=4) |>
+  arrange(-R2) |> 
+  kbl(digits=3) |>
   kable_classic_2("hover", full_width = T) |>
-  as_image(width = 7,file = "README_files/figure-gfm/val_last_table_AADT.png")
+  as_image(width = 10,file = "README_files/figure-gfm/val_last_table_AADT.png")
 
 
 ## ----eval=FALSE---------------------------------------------------------------
@@ -957,6 +968,7 @@ tbl_val_gwr_results_last_AADT |>
 #> 
 
 ## ----echo=FALSE---------------------------------------------------------------
+library(knitr)
 include_graphics(path = "README_files/figure-gfm/coef_maps.png")
 
 
